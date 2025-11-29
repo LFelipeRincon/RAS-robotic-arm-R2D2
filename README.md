@@ -302,7 +302,7 @@ robotic_arm_joy/
 
 ## Video del Expo-Proyecto
 ```markdown
-[![Ver video de demostración del brazo robótico](https://img.youtube.com/vi/hoDyDBRrRAo/0.jpg)](https://youtu.be/hoDyDBRrRAo)
+[![Ver video de demostración del brazo robótico](https://youtu.be/hoDyDBRrRAo)]
 
 ```
 
