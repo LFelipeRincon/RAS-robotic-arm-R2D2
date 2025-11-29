@@ -36,32 +36,26 @@ Sistema completo para controlar un brazo robótico de cuatro servomotores utiliz
    sudo apt install ros-jazzy-desktop ros-jazzy-joy
    ```
 
-3. Instalar dependencias de Python:
-
-   ```bash
-   pip install pyserial
-   ```
-
-4. Cargar el firmware de Arduino:
+3. Cargar el firmware de Arduino:
 
    * Abrir la carpeta `Arduino_robotic_arm_controller` o `arduino_joystick` en PlatformIO o Arduino IDE.
    * Seleccionar la placa correcta (UNO/Nano/Mega).
    * Compilar y subir el código al Arduino desde el botón de “Upload”.
 
-5. Compilar los paquetes ROS 2 (desde el workspace que contenga los paquetes):
+4. Compilar los paquetes ROS 2 (desde el workspace que contenga los paquetes):
 
    ```bash
    colcon build
    source install/setup.bash
    ```
 
-6. Ejecutar modo teclado:
+5. Ejecutar modo teclado:
 
    ```bash
    ros2 run robotic_arm_servo_controller joint_controller
    ```
 
-7. Ejecutar modo joystick:
+6. Ejecutar modo joystick:
 
    ```bash
    ros2 run joy joy_node
@@ -77,7 +71,7 @@ Este proyecto implementa el control completo de un brazo robótico tipo RAS medi
 El sistema incluye dos modos de operación:
 
 * **Modo teclado**: control directo por ángulos usando tópicos ROS.
-* **Modo joystick**: control continuo mediante los ejes de un gamepad, mapeando los valores de -1 a 1 en cada eje a ángulos de 0° a 180°.
+* **Modo joystick**: control continuo mediante los ejes de un mando ( xbox 360 wired), mapeando los valores de -1 a 1 en cada eje a ángulos de 0° a 180°.
 
 Tecnologías utilizadas:
 
