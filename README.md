@@ -306,7 +306,6 @@ robotic_arm_joy/
 
 ```
 
-También se pueden incluir miniaturas o capturas de pantalla en la carpeta `media/` para documentar diferentes posiciones del brazo y pruebas realizadas.
 
 ---
 
