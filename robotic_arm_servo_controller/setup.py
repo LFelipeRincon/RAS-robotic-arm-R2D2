@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            # Nodo que controla los 3 servos via Serial
+            # Nodo que controla los 4 servos via Serial
             'joint_controller = robotic_arm_servo_controller.joints_keyboard:main',
         ],
     },

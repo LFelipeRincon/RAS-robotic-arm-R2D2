@@ -11,21 +11,8 @@ const int pin_servo1 = 7;
 const int pin_servo2 = 6;
 const int pin_servo3 = 5;
 
-// pin para estado de garra (opcional, por ejemplo un led o rele)
+// pin para estado de garra 
 const int pin_garra = 4;
-
-// funcion para pasar de eje [-1,1] a angulo [0,180]
-int mapAxisToAngle(float x) {
-    int ang = (int)((x + 1.0f) * 90.0f);  // -1 -> 0, 0 -> 90, 1 -> 180
-
-    if (ang < 0) {
-        ang = 0;
-    }
-    if (ang > 180) {
-        ang = 180;
-    }
-    return ang;
-}
 
 void setup() {
 
@@ -40,60 +27,59 @@ void setup() {
     servo1.write(90);
     servo2.write(90);
     servo3.write(90);
-    servo4.write(45);
+    servo4.write(0);
 }
 
-void loop() {
+// ángulos actuales
+int ang1 = 90, ang2 = 90, ang3 = 90, ang4 = 45;
 
+const int paso = 10;
+
+void loop() {
     if (Serial.available() > 0) {
 
-        // formato esperado:
-        // eje_der,eje_izq_ver,eje_der_ver,gripper_state\n
         String linea = Serial.readStringUntil('\n');
         linea.trim();
+        if (linea.length() == 0) return;
 
-        if (linea.length() == 0) {
-            return;
-        }
-
-        // posiciones de las comas
         int c1 = linea.indexOf(',');
         int c2 = linea.indexOf(',', c1 + 1);
         int c3 = linea.indexOf(',', c2 + 1);
+        if (c1 == -1 || c2 == -1 || c3 == -1) return;
 
-        // deben existir 3 comas
-        if (c1 == -1 || c2 == -1 || c3 == -1) {
-            return;
-        }
-
-        // separar campos
         String s_eje_der      = linea.substring(0, c1);
         String s_eje_izq_ver  = linea.substring(c1 + 1, c2);
         String s_eje_der_ver  = linea.substring(c2 + 1, c3);
         String s_gripper      = linea.substring(c3 + 1);
 
-        // convertir a numeros
         float eje_der     = s_eje_der.toFloat();
         float eje_izq_ver = s_eje_izq_ver.toFloat();
         float eje_der_ver = s_eje_der_ver.toFloat();
         int gripper_state = s_gripper.toInt();
 
-        // mapear ejes a angulos
-        int ang1 = mapAxisToAngle(eje_der);      // servo 1 abajo
-        int ang2 = mapAxisToAngle(eje_izq_ver);  // servo 2 izquierda vertical
-        int ang3 = mapAxisToAngle(eje_der_ver);  // servo 3 derecha
+        // Añadir incremento según el eje
+        if (eje_der > 0.2)  ang1 += paso;
+        if (eje_der < -0.2) ang1 -= paso;
 
-        // mover servos
+        if (eje_izq_ver > 0.2)  ang2 += paso;
+        if (eje_izq_ver < -0.2) ang2 -= paso;
+
+        if (eje_der_ver > 0.2)  ang3 += paso;
+        if (eje_der_ver < -0.2) ang3 -= paso;
+
+        // límite de seguridad
+        ang1 = constrain(ang1, 0, 180);
+        ang2 = constrain(ang2, 0, 180);
+        ang3 = constrain(ang3, 0, 180);
+
+        // mover servos 
         servo1.write(ang1);
         servo2.write(ang2);
         servo3.write(ang3);
 
-        // usar gripper_state como salida digital
-        // 0 -> LOW, 1 -> HIGH
-        if (gripper_state == 1) {
-            servo4.write(45);
-        } else {
-            servo4.write(0);
-        }
+        // control garra simple
+        servo4.write(gripper_state == 1 ? 45 : 0);
+
+        delay(20); 
     }
 }
